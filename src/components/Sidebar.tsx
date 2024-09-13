@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
-export const Sidebar = () => {
+type Props = {
+  setTable: (seats: number) => void;
+  clearTables: () => void;
+};
+
+export const Sidebar = (props: Props) => {
+  const addTable = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const seats = formData.get('seats');
+    e.target.reset();
+    props.setTable(Number(seats));
+  };
+  const deleteAllTables = () => {
+    props.clearTables();
+  };
   return (
     <div className="border border-red-500 min-w-52">
       <div className="flex flex-col gap-6 items-center justify-center px-5 py-3">
         <p className="text-xl">Table</p>
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={addTable}>
           <div className="flex flex-row gap-4">
             <label htmlFor="seats">Seats</label>
             <input
@@ -24,6 +39,13 @@ export const Sidebar = () => {
             Add table
           </button>
         </form>
+        <button
+          type="button"
+          className="border border-red-500 bg-red-400 text-white px-3 py-2 rounded"
+          onClick={deleteAllTables}
+        >
+          Clear
+        </button>
       </div>
     </div>
   );
